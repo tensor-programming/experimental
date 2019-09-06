@@ -3,6 +3,11 @@
 #include "webview.hpp"
 #include <string>
 #include <deque>
+#include <functional>
+#include <hstring.h>
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Storage.h>
+#include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Web.UI.Interop.h>
 #include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Security.Cryptography.h>
@@ -15,6 +20,7 @@ extern "C"
 
 using namespace winrt;
 using namespace Windows::Foundation;
+using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
 using namespace Windows::Security::Cryptography;
 using namespace Windows::Web::UI::Interop;
@@ -35,17 +41,14 @@ public:
 
     IAsyncOperation<IInputStream> UriToStreamAsync(Uri uri) const
     {
-        size_t length = 0;
-        const uint8_t *content = nullptr;
-        bool result = webview_get_content(m_webview, winrt::to_string(uri.Path()).c_str(), &content, &length);
-        if (!result)
-        {
-            throw_hresult(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
-        }
+        Uri localUri = Uri(uri.Path());
+        auto fOp = StorageFile::GetFileFromPathAsync(localUri.AbsoluteUri());
 
-        auto buffer = CryptographicBuffer::CreateFromByteArray(winrt::array_view<const uint8_t>(content, content + length - 1));
-        auto stream = InMemoryRandomAccessStream();
-        co_await stream.WriteAsync(buffer);
+        StorageFile f = fOp.get();
+
+        auto sOp = f.OpenAsync(FileAccessMode::Read);
+        IRandomAccessStream stream = sOp.get();
+
         co_return stream.GetInputStreamAt(0);
     }
 

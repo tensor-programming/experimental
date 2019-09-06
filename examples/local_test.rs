@@ -14,16 +14,16 @@ use std::io::prelude::*;
 use std::thread;
 
 fn main() {
-    let mut html = File::open("resources/vue-example/index.html").unwrap();
+    let mut html = File::open("resources/index.html").unwrap();
     let mut html_contents = String::new();
     html.read_to_string(&mut html_contents).unwrap();
-    let mut js = File::open("resources/vue-example/dist/build.js").unwrap();
-    let mut contents = String::new();
-    js.read_to_string(&mut contents).unwrap();
+    // let mut js = File::open("resources/vue-example/dist/build.js").unwrap();
+    // let mut contents = String::new();
+    // js.read_to_string(&mut contents).unwrap();
 
     let mut webview = WebView::new(
         "Basic Example",
-        Content::Html("<h1>Hello World!</h1>"),
+        Content::Html(html_contents),
         (800, 600),
         true,
     )

@@ -21,7 +21,7 @@ fn main() {
     let url: Cow<str> = args
         .next()
         .map(|url| url.into())
-        .unwrap_or("resources/vanillajs/index.html".into());
+        .unwrap_or("resources/index.html".into());
     println!("Opening a web view to {}", url);
 
     let mut event_loop = EventLoop::new();
@@ -59,8 +59,9 @@ fn main() {
                 ..
             } => {
                 let size: (u32, u32) = size.to_physical(window.hidpi_factor()).into();
-                #[warn(unused_must_use)]
-                control.resize(None, Some((size.0 as i32, size.1 as i32)));
+                control
+                    .resize(None, Some((size.0 as i32, size.1 as i32)))
+                    .unwrap();
             }
             _ => (),
         }
