@@ -1,5 +1,4 @@
 use std::borrow::Cow;
-use std::io::Read;
 
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
