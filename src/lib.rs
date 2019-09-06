@@ -6,4 +6,5 @@ extern crate lazy_static;
 
 #[cfg(all(windows, feature = "edgehtml"))]
 pub mod edge;
+pub mod edge_manual;
 pub mod edge_winit;
