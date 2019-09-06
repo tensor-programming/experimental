@@ -1,0 +1,13 @@
+[package]
+name = "webview-sys"
+version = "0.1.0"
+authors = ["tensor-programming <abeltensor@tensor-programming.com>"]
+edition = "2018"
+
+[lib]
+name = "webview_sys"
+path = "lib.rs"
+
+[build-dependencies]
+cc = "1.0.42"
+bindgen = "0.51.0"
